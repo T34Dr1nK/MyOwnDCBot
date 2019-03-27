@@ -71,20 +71,22 @@ client.on("message", async message => {
   const command = args.shift().toLowerCase();
   
   
-    if(command === "เตะ"){
+        if(command === "เตะ"){
     
     const user = message.mentions.users.first();
+	const perm=message.member.permissions;
     
     if (user) {
+		if (perm.has('KICK_MEMBERS')) {
+			const member = message.guild.member(user);
+			
       
-      const member = message.guild.member(user);
-      
-      if (member) {
+			if (member) {
         	      
-		member.send("ท่านถูกเตะออกจากเซิฟเจ้าคะ");
-        member.kick('ไม่มีเหตุผลเจ้าค่ะ').then(() => {  
-          message.reply(`เตะท่าน ${user.tag} ออกจากห้องสําเร็จแล้วคะ`);
-        }).catch(err => {
+			member.send("ท่านถูกเตะออกจากเซิฟเจ้าคะ");
+			member.kick('ไม่มีเหตุผลเจ้าค่ะ').then(() => {  
+			message.reply(`เตะท่าน ${user.tag} ออกจากห้องสําเร็จแล้วคะ`);
+		}).catch(err => {
           
           message.reply('ขออภัยค่ะนายท่านฉันไม่สามารถเตะเค้าได้');
           
@@ -94,17 +96,22 @@ client.on("message", async message => {
         
         message.reply('ไม่พบผู้ใช้ดังกล่าวในห้องนี้เจ้าคะ');
       }
-    
-    } else {
+		
+		}
+		else {
+      message.reply('ท่านไม่มีความสามารถนี้');
+	}
+	}	else {
       message.reply('โปรดระบุคนที่จะเตะด้วยนะเจ้าค่ะ');
     }
-  };
+	};
   
   if(command === "แบน"){
 	  const user = message.mentions.users.first();
+	  const perm=message.member.permissions;
     
     if (user) {
-      
+      if (perm.has('BAN_MEMBERS')) {
       const member = message.guild.member(user);
       
       if (member) {
@@ -123,7 +130,12 @@ client.on("message", async message => {
       } else {
         message.reply('เค้าไม่ได้อยู่ใน server นี้นะเจ้าค่ะ');
       }
-    } else {
+	  }
+		else {
+      message.reply('ท่านไม่มีความสามารถนี้');
+    } 
+	}
+	else {
       message.reply('โปรดระบุตัวคนที่จะแบนด้วยเจ้าคะ');
     }
   };
