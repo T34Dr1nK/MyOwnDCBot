@@ -71,7 +71,62 @@ client.on("message", async message => {
   const command = args.shift().toLowerCase();
   
   
-
+    if(command === "เตะ"){
+    
+    const user = message.mentions.users.first();
+    
+    if (user) {
+      
+      const member = message.guild.member(user);
+      
+      if (member) {
+        	      
+		member.send("ท่านถูกเตะออกจากเซิฟเจ้าคะ");
+        member.kick('ไม่มีเหตุผลเจ้าค่ะ').then(() => {  
+          message.reply(`เตะท่าน ${user.tag} ออกจากห้องสําเร็จแล้วคะ`);
+        }).catch(err => {
+          
+          message.reply('ขออภัยค่ะนายท่านฉันไม่สามารถเตะเค้าได้');
+          
+          console.error(err);
+        });
+      } else {
+        
+        message.reply('ไม่พบผู้ใช้ดังกล่าวในห้องนี้เจ้าคะ');
+      }
+    
+    } else {
+      message.reply('โปรดระบุคนที่จะเตะด้วยนะเจ้าค่ะ');
+    }
+  };
+  
+  if(command === "แบน"){
+	  const user = message.mentions.users.first();
+    
+    if (user) {
+      
+      const member = message.guild.member(user);
+      
+      if (member) {
+       
+        member.ban({
+          reason: 'นิสัยไม่ดีเจ้าค่ะ',
+        }).then(() => {
+          
+          message.reply(`ทําการแบนท่าน ${user.tag} สําเร็จแล้วค่ะ`);
+        }).catch(err => {
+          
+          message.reply('ขอโทษคะไม่สามารถแบนท่านนั้นได้');
+          
+          console.error(err);
+        });
+      } else {
+        message.reply('เค้าไม่ได้อยู่ใน server นี้นะเจ้าค่ะ');
+      }
+    } else {
+      message.reply('โปรดระบุตัวคนที่จะแบนด้วยเจ้าคะ');
+    }
+  };
   
   if(command === "เช็คปิง") {
     
@@ -130,69 +185,8 @@ client.on("message", async message => {
     message.channel.bulkDelete(fetched)
       .catch(error => message.reply(`ไม่สามารถลบข้อความข้างได้เพราะ : ${error}เจ้าคะ`));
   }
-}
-    client.on('message', function (user, userID, channelID, message, evt) {
-	
-	if(command === "เตะ"){
-    
-    const user = message.mentions.users.first();
-    
-    if (user) {
-      
-      const member = message.guild.member(user);
-      
-      if (member) {
-        	      
-		member.send("ท่านถูกเตะออกจากเซิฟเจ้าคะ");
-        member.kick('ไม่มีเหตุผลเจ้าค่ะ').then(() => {  
-          message.reply(`เตะท่าน ${user.tag} ออกจากห้องสําเร็จแล้วคะ`);
-        }).catch(err => {
-          
-          message.reply('ขออภัยค่ะนายท่านฉันไม่สามารถเตะเค้าได้');
-          
-          console.error(err);
-        });
-      } else {
-        
-        message.reply('ไม่พบผู้ใช้ดังกล่าวในห้องนี้เจ้าคะ');
-      }
-    
-    } else {
-      message.reply('โปรดระบุคนที่จะเตะด้วยนะเจ้าค่ะ');
-    }
-  };
-  
-  if(command === "แบน"){
-	  const user = message.mentions.users.first();
-    
-    if (user) {
-      
-      const member = message.guild.member(user);
-      
-      if (member) {
-       
-        member.ban({
-          reason: 'นิสัยไม่ดีเจ้าค่ะ',
-        }).then(() => {
-          
-          message.reply(`ทําการแบนท่าน ${user.tag} สําเร็จแล้วค่ะ`);
-        }).catch(err => {
-          
-          message.reply('ขอโทษคะไม่สามารถแบนท่านนั้นได้');
-          
-          console.error(err);
-        });
-      } else {
-        message.reply('เค้าไม่ได้อยู่ใน server นี้นะเจ้าค่ะ');
-      }
-    } else {
-      message.reply('โปรดระบุตัวคนที่จะแบนด้วยเจ้าคะ');
-    }
-  };
-  });
-);
+});
 
 
 
 client.login(process.env.BOT_TOKEN)
-require('http').createServer().listen()
