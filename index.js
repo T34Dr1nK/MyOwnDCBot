@@ -184,10 +184,11 @@ client.on("message", async message => {
 	  return message.reply("ขณะนี้นายท่านสามารถใช้คําสั่งได้ดังนี้เจ้าค่ะ \n |ลบ เพื่อลบข้อความเก่าในช่องแชทค่ะ exe.|ลบ แล้วตามด้วยจํานวนข้อที่จะลบตั้่งแต่ 2-100 ค่ะ.  \n |เตะ   เอาไว้เตะคนออกจากห้องเจ้าค่ะ exe.|เตะ ตามด้วยการMentionค่ะ. \n |แบน   เอาไว้แบนคนออกจากห้องค่ะ  exe.|แบน ตามด้วยการMentionเจ้าค่ะ. \n |เช็คปิง เอาไว้ดูปืงภายในserverว่าเสถียรแค่ไหน exe.|เช็คปิง . \n |พูด เวลาที่นายท่านไม่อยากพูดเองให้ฉันแทนนายท่านได้เจ้าค่ะ exe.|พูด ตามด้วยข้อความที่จะให้ฉันพูดค่ะ \n และถ้านายท่านมีห้อง general อยู่ฉันก็จะไปต้อนรับแขกที่เข้ามาใหม่ที่ห้องนั้นค่ะ");
   }
   
-  if(command === "ลบ") {
+    if(command === "ลบ") {
     
     const deleteCount = parseInt(args[0], 10);
-    
+    const perm=message.member.permissions;
+	if(perm.has('MANAGE_MESSAGES')){
     
     if(!deleteCount || deleteCount < 2 || deleteCount > 100)
       return message.reply("โปรดใส่เลขระหว่าง 2 ถึง 100 นะเจ้าค่ะ");
@@ -196,6 +197,10 @@ client.on("message", async message => {
     const fetched = await message.channel.fetchMessages({limit: deleteCount});
     message.channel.bulkDelete(fetched)
       .catch(error => message.reply(`ไม่สามารถลบข้อความข้างได้เพราะ : ${error}เจ้าคะ`));
+  }
+  else{
+	message.reply('นายท่านไม่มีสิทธิ์ในการลบข้อความเจ้าคะ')
+  }
   }
 });
 
