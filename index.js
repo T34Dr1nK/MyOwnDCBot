@@ -146,14 +146,7 @@ client.on("message", async message => {
     m.edit(`Pong! ความเร็วสเฉลี่ยสู่ข้อมูลปลายทางคือ ${m.createdTimestamp - message.createdTimestamp}ms. ความเร็วสเฉลี่ยสู่ข้อมูลปลายทางของ API คือ  ${Math.round(client.ping)}ms เจ้าค่ะ`);
   }
   
-  if(command === "พูด") {
-    
-    const sayMessage = args.join(" ");
-    
-    message.delete().catch(O_o=>{}); 
-    
-    message.channel.send(sayMessage);
-  }
+  
  
  
 
