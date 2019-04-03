@@ -149,7 +149,16 @@ client.on("message", async message => {
   
  
  
+if(command === "พูด") {
 
+    const sayMessage = args.join(" ");
+	const user= message.author;
+	
+	message.delete().catch(O_o=>{}); 
+
+    message.channel.send(sayMessage+" จากท่าน"+" "+user);
+  }
+ 
 
 
 
