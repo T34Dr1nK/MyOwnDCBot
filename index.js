@@ -1,11 +1,30 @@
 const Discord = require("discord.js");
+const YTDL = require('ytdl-core');
 
+
+
+function play(connection, message){
+	var server =servers[message.guild.id];
+	
+	server.dispatcher = connection.playStream(YTDL(server.queue[0], {filter: "audioonly"}));
+	
+	server.queue.shift();
+	
+	server.dispatcher.on("end", function() {
+		if(server.queue[0])play(connection, message);
+		else connection.disconnect();
+	});
+}
 var Long = require("long");
+
+var servers = {};
+
 
 const client = new Discord.Client();
 
 
 const config = require("./config.json");
+
 
 client.on("ready", () => {
  
@@ -69,9 +88,9 @@ client.on("message", async message => {
   
   const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
   const command = args.shift().toLowerCase();
+
   
-  
-        if(command === "เตะ"){
+    if(command === "เตะ"){
     
     const user = message.mentions.users.first();
 	const perm=message.member.permissions;
@@ -146,10 +165,7 @@ client.on("message", async message => {
     m.edit(`Pong! ความเร็วสเฉลี่ยสู่ข้อมูลปลายทางคือ ${m.createdTimestamp - message.createdTimestamp}ms. ความเร็วสเฉลี่ยสู่ข้อมูลปลายทางของ API คือ  ${Math.round(client.ping)}ms เจ้าค่ะ`);
   }
   
-  
- 
- 
-if(command === "พูด") {
+	if(command === "พูด") {
 
     const sayMessage = args.join(" ");
 	const user= message.author;
@@ -159,6 +175,8 @@ if(command === "พูด") {
     message.channel.send(sayMessage+" จากท่าน"+" "+user);
   }
  
+ 
+
 
 
 
@@ -177,18 +195,41 @@ if(command === "พูด") {
   }
  
  
- 
- 
- 
- 
- 
-    if(command === "คู่มือ"){
+
+
+
+
+
+if(command === "เล่น"){
+	const sayMessage = args.join(" ");
+
+	if(!message.member.voiceChannel){
+		message.channel.send("นายท่านต้องอยู่ในห้อง Voice นะเจ้าค่ะ");
+	return;
+	}
+	if(!servers[message.guild.id])servers[message.guild.id]={
+		queue:[]
+	};
+	var server =servers[message.guild.id];
+	
+	server.queue.push(sayMessage);
+	if(!message.guild.voiceConnection)message.member.voiceChannel.join().then(function(connection){
+		play(connection, message);
+	});
+}
+
+
+
+
+
+
+
+ if(command === "คู่มือ"){
 	  message.author.send("ขณะนี้นายท่านสามารถใช้คําสั่งได้ดังนี้เจ้าค่ะ \n |ลบ เพื่อลบข้อความเก่าในช่องแชทค่ะ exe.|ลบ แล้วตามด้วยจํานวนข้อที่จะลบตั้่งแต่ 2-100 ค่ะ.  \n |เตะ   เอาไว้เตะคนออกจากห้องเจ้าค่ะ exe.|เตะ ตามด้วยการMentionค่ะ. \n |แบน   เอาไว้แบนคนออกจากห้องค่ะ  exe.|แบน ตามด้วยการMentionเจ้าค่ะ. \n |เช็คปิง เอาไว้ดูปืงภายในserverว่าเสถียรแค่ไหน exe.|เช็คปิง . \n |พูด เวลาที่นายท่านไม่อยากพูดเองให้ฉันแทนนายท่านได้เจ้าค่ะ exe.|พูด ตามด้วยข้อความที่จะให้ฉันพูดค่ะ \n และถ้านายท่านมีห้อง general อยู่ฉันก็จะไปต้อนรับแขกที่เข้ามาใหม่ที่ห้องนั้นค่ะ");
 	  return message.reply("ส่งข้อความเข้า DM แล้วค่ะ");
-	  ;
   }
   
-    if(command === "ลบ") {
+  if(command === "ลบ") {
     
     const deleteCount = parseInt(args[0], 10);
     const perm=message.member.permissions;
@@ -206,7 +247,9 @@ if(command === "พูด") {
 	message.reply('นายท่านไม่มีสิทธิ์ในการลบข้อความเจ้าคะ')
   }
   }
+  
 });
+
 
 
 
