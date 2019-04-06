@@ -1,23 +1,10 @@
 const Discord = require("discord.js");
-const YTDL = require('ytdl-core');
 
 
 
-function play(connection, message){
-	var server =servers[message.guild.id];
-	
-	server.dispatcher = connection.playStream(YTDL(server.queue[0], {filter: "audioonly"}));
-	
-	server.queue.shift();
-	
-	server.dispatcher.on("end", function() {
-		if(server.queue[0])play(connection, message);
-		else connection.disconnect();
-	});
-}
+
 var Long = require("long");
 
-var servers = {};
 
 
 const client = new Discord.Client();
@@ -198,25 +185,6 @@ client.on("message", async message => {
 
 
 
-
-
-if(command === "เล่น"){
-	const sayMessage = args.join(" ");
-
-	if(!message.member.voiceChannel){
-		message.channel.send("นายท่านต้องอยู่ในห้อง Voice นะเจ้าค่ะ");
-	return;
-	}
-	if(!servers[message.guild.id])servers[message.guild.id]={
-		queue:[]
-	};
-	var server =servers[message.guild.id];
-	
-	server.queue.push(sayMessage);
-	if(!message.guild.voiceConnection)message.member.voiceChannel.join().then(function(connection){
-		play(connection, message);
-	});
-}
 
 
 
