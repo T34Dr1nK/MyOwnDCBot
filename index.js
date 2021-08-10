@@ -180,6 +180,10 @@ client.on("message", async message => {
   if(command === "ทำอะไรอยู่"){
 	 return message.reply("คุยกับนายท่านไงเจ้าค่ะ");
   }
+	
+  if(command === "test"){
+	 return message.reply("เช็ค");
+  }
  
  
 
